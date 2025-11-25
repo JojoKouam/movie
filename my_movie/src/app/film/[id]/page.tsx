@@ -1,15 +1,19 @@
-import { getMovieById, getMovieCast  } from '../../../../lib/tmdb';
-import Image from 'next/image';
-import Link from 'next/link';
+import { getMovieById, getMovieCast } from "../../../../lib/tmdb";
+import Image from "next/image";
+import Link from "next/link";
 
-export default async function MoviePage({ params }: { params: Promise<{ id: string }>  }) {
+export default async function MoviePage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
   const resolvedParams = await params;
   const id = resolvedParams.id;
 
   // les infos du film et le casting
   const [movie, castData] = await Promise.all([
     getMovieById(id),
-    getMovieCast(id)
+    getMovieCast(id),
   ]);
 
   console.log("--- DEBUG FILM ---");
@@ -17,14 +21,12 @@ export default async function MoviePage({ params }: { params: Promise<{ id: stri
   console.log("Données reçues :", movie);
   console.log("------------------");
   // les 5 premiers acteurs
-    const mainCast = castData?.cast ? castData.cast.slice(0, 5) : [];
+  const mainCast = castData?.cast ? castData.cast.slice(0, 5) : [];
 
   return (
     <div className="min-h-screen bg-[#111] text-white font-sans">
-      
       {/* HERO SECTION  */}
       <div className="relative w-full min-h-[85vh] md:h-[80vh] flex items-end">
-        
         {/* Image de fond */}
         <div className="absolute inset-0">
           <Image
@@ -32,16 +34,15 @@ export default async function MoviePage({ params }: { params: Promise<{ id: stri
             alt={movie.title}
             fill
             className="object-cover opacity-50"
-            priority 
+            priority
           />
-         
+
           <div className="absolute inset-0 bg-gradient-to-t from-[#111] via-[#111]/50 to-transparent" />
         </div>
 
-        {/* Contenu (Poster + Texte) */}
+        {/* Contenu */}
         <div className="relative z-10 w-full max-w-7xl mx-auto px-4 pt-32 pb-12 flex flex-col md:flex-row items-end gap-8">
-          
-          {/* Poster (caché sur mobile, visible sur desktop) */}
+          {/* Poster */}
           <div className="hidden md:block w-64 h-96 relative rounded-lg overflow-hidden shadow-2xl border-2 border-gray-700 flex-shrink-0">
             <Image
               src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
@@ -56,28 +57,34 @@ export default async function MoviePage({ params }: { params: Promise<{ id: stri
             <h1 className="text-4xl md:text-6xl font-bold leading-tight">
               {movie.title}
             </h1>
-            
+
             <div className="flex items-center gap-4 text-sm md:text-base text-gray-300">
               {movie.vote_average ? (
-    <span className="bg-green-600 text-white px-2 py-1 rounded font-bold">
-      {movie.vote_average.toFixed(1)}
-    </span>
-  ) : null}
+                <span className="bg-green-600 text-white px-2 py-1 rounded font-bold">
+                  {movie.vote_average.toFixed(1)}
+                </span>
+              ) : null}
               <span>
-    {movie.release_date ? movie.release_date.split('-')[0] : 'Date inconnue'}
-  </span>
-  <span>
-    {movie.runtime 
-      ? `${Math.floor(movie.runtime / 60)}h ${movie.runtime % 60}m` 
-      : 'Durée inconnue'}
-  </span>              <span>•</span>
+                {movie.release_date
+                  ? movie.release_date.split("-")[0]
+                  : "Date inconnue"}
+              </span>
+              <span>
+                {movie.runtime
+                  ? `${Math.floor(movie.runtime / 60)}h ${movie.runtime % 60}m`
+                  : "Durée inconnue"}
+              </span>{" "}
+              <span>•</span>
               {/* Liste des genres */}
               <div className="flex gap-2">
                 {movie.genres?.map((g: any) => (
-      <span key={g.id} className="border border-gray-600 px-2 py-0.5 rounded-full text-xs">
-        {g.name}
-      </span>
-    ))}
+                  <span
+                    key={g.id}
+                    className="border border-gray-600 px-2 py-0.5 rounded-full text-xs"
+                  >
+                    {g.name}
+                  </span>
+                ))}
               </div>
             </div>
 
@@ -97,7 +104,9 @@ export default async function MoviePage({ params }: { params: Promise<{ id: stri
 
       {/* SECTION CASTING */}
       <div className="max-w-7xl mx-auto px-4 py-12">
-        <h2 className="text-2xl font-bold mb-6 border-l-4 border-yellow-500 pl-3">Casting principal</h2>
+        <h2 className="text-2xl font-bold mb-6 border-l-4 border-yellow-500 pl-3">
+          Casting principal
+        </h2>
         <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-gray-700">
           {mainCast.map((actor: any) => (
             <div key={actor.id} className="min-w-[120px] text-center">
@@ -110,7 +119,9 @@ export default async function MoviePage({ params }: { params: Promise<{ id: stri
                     className="object-cover"
                   />
                 ) : (
-                  <div className="w-full h-full bg-gray-800 flex items-center justify-center text-xs">No Image</div>
+                  <div className="w-full h-full bg-gray-800 flex items-center justify-center text-xs">
+                    No Image
+                  </div>
                 )}
               </div>
               <p className="font-bold text-sm">{actor.name}</p>
@@ -119,7 +130,6 @@ export default async function MoviePage({ params }: { params: Promise<{ id: stri
           ))}
         </div>
       </div>
-
     </div>
   );
 }

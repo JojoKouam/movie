@@ -28,19 +28,19 @@ export default function Navbar() {
           <div className="h-4 w-px bg-gray-700"></div>
 
           <div className="flex items-center gap-4">
-            {/* Bouton Inscription (Discret) */}
+            {/* Bouton Inscription */}
             <Link href="/register" className="text-gray-300 hover:text-white transition">
               S&apos;inscrire
             </Link>
 
-            {/* Bouton Connexion (Mis en avant) */}
+            {/* Bouton Connexion*/}
             <Link href="/login" className="bg-green-600 text-white px-5 py-2.5 rounded-full font-bold hover:bg-green-700 transition shadow-lg shadow-green-900/20">
               Connexion
             </Link>
           </div>
         </nav>
 
-        {/* MENU MOBILE (Burger) */}
+        {/* MENU MOBILE*/}
         <button className="md:hidden text-white text-2xl p-2">
            ☰
         </button>

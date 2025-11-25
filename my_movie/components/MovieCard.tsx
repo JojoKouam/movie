@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
-// L'URL de base pour afficher les images
+// L'URL pour afficher les images
 const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500';
 
 interface MovieProps {

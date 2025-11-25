@@ -18,7 +18,7 @@ export default async function Home() {
 
       {/*  SECTION 1 : À L'AFFICHE */}
       <section id="now-playing" className="px-4 py-8 max-w-7xl mx-auto border-t border-gray-800/50">
-        <div className="mb-6">
+        <div className="px-4 mb-4 flex items-end justify-between">
           <h2 className="text-xl md:text-2xl font-bold text-white flex items-center gap-2">
              <span className="w-1 h-6 bg-green-500 rounded-full inline-block"></span>
             À l&apos;affiche au cinéma
@@ -36,7 +36,7 @@ export default async function Home() {
       </section>
       {/* SECTION 2 : PROCHAINEMENT */}
       
-      <section id="upcoming" className="pt-8 pb-4 max-w-7xl mx-auto">
+      <section id="upcoming" className="pt-8 pb-4 max-w-7xl mx-auto border-t border-gray-800/50">
         <div className="px-4 mb-4 flex items-end justify-between">
           <h2 className="text-xl md:text-2xl font-bold text-white flex items-center gap-2">
             <span className="w-1 h-6 bg-blue-500 rounded-full inline-block"></span>
@@ -55,7 +55,7 @@ export default async function Home() {
         </div>
       </section>
 
-
+{/* SECTION 3 : FILMS NOTÉS*/}
      <section className="pt-8 pb-4 max-w-7xl mx-auto border-t border-gray-800/50">
         <div className="px-4 mb-4">
           <h2 className="text-xl md:text-2xl font-bold text-white flex items-center gap-2">

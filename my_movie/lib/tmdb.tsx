@@ -47,3 +47,13 @@ export async function getUpcomingMovies() {
   
   return data.results;
 }
+//  Récupérer les films à venir 
+export async function getTopRatedMovies() {
+
+  const reponse = await fetch((`${BASE_URL}/movie/top_rated?api_key=${API_KEY}&language=fr-FR`), {
+    next: { revalidate: 3600 }
+  });
+  const data = await reponse.json();
+  
+  return data.results;
+}

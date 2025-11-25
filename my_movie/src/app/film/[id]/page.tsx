@@ -2,12 +2,11 @@ import { getMovieById, getMovieCast  } from '../../../../lib/tmdb';
 import Image from 'next/image';
 import Link from 'next/link';
 
-// C'est ça qui récupère l'ID dans l'URL
 export default async function MoviePage({ params }: { params: Promise<{ id: string }>  }) {
   const resolvedParams = await params;
   const id = resolvedParams.id;
 
-  // On récupère les infos du film et le casting en parallèle
+  // les infos du film et le casting
   const [movie, castData] = await Promise.all([
     getMovieById(id),
     getMovieCast(id)
@@ -23,10 +22,10 @@ export default async function MoviePage({ params }: { params: Promise<{ id: stri
   return (
     <div className="min-h-screen bg-[#111] text-white font-sans">
       
-      {/* --- HERO SECTION (Image de fond + Infos) --- */}
-      <div className="relative w-full h-[70vh] md:h-[80vh]">
+      {/* HERO SECTION  */}
+      <div className="relative w-full min-h-[85vh] md:h-[80vh] flex items-end">
         
-        {/* Image de fond (Backdrop) */}
+        {/* Image de fond */}
         <div className="absolute inset-0">
           <Image
             src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
@@ -40,7 +39,7 @@ export default async function MoviePage({ params }: { params: Promise<{ id: stri
         </div>
 
         {/* Contenu (Poster + Texte) */}
-        <div className="relative z-10 max-w-7xl mx-auto px-4 h-full flex flex-col md:flex-row items-end pb-12 gap-8">
+        <div className="relative z-10 w-full max-w-7xl mx-auto px-4 pt-32 pb-12 flex flex-col md:flex-row items-end gap-8">
           
           {/* Poster (caché sur mobile, visible sur desktop) */}
           <div className="hidden md:block w-64 h-96 relative rounded-lg overflow-hidden shadow-2xl border-2 border-gray-700 flex-shrink-0">
@@ -96,7 +95,7 @@ export default async function MoviePage({ params }: { params: Promise<{ id: stri
         </div>
       </div>
 
-      {/* --- SECTION CASTING --- */}
+      {/* SECTION CASTING */}
       <div className="max-w-7xl mx-auto px-4 py-12">
         <h2 className="text-2xl font-bold mb-6 border-l-4 border-yellow-500 pl-3">Casting principal</h2>
         <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-gray-700">

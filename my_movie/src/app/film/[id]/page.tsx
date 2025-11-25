@@ -87,7 +87,7 @@ export default async function MoviePage({ params }: { params: Promise<{ id: stri
 
             {/* Bouton Réserver */}
             <div className="pt-4">
-              <button className="bg-yellow-500 text-black px-8 py-3 rounded-full font-bold text-lg hover:bg-yellow-400 transition-transform transform hover:scale-105 shadow-lg shadow-yellow-500/20">
+              <button className="bg-green-600 text-black px-8 py-3 rounded-full font-bold text-lg hover:bg-yellow-400 transition-transform transform hover:scale-105 shadow-lg shadow-yellow-500/20">
                 🎟️ Réserver ma place
               </button>
             </div>

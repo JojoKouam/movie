@@ -1,0 +1,126 @@
+import { getMovieById, getMovieCast  } from '../../../../lib/tmdb';
+import Image from 'next/image';
+import Link from 'next/link';
+
+// C'est ça qui récupère l'ID dans l'URL
+export default async function MoviePage({ params }: { params: Promise<{ id: string }>  }) {
+  const resolvedParams = await params;
+  const id = resolvedParams.id;
+
+  // On récupère les infos du film et le casting en parallèle
+  const [movie, castData] = await Promise.all([
+    getMovieById(id),
+    getMovieCast(id)
+  ]);
+
+  console.log("--- DEBUG FILM ---");
+  console.log("ID demandé :", id);
+  console.log("Données reçues :", movie);
+  console.log("------------------");
+  // les 5 premiers acteurs
+    const mainCast = castData?.cast ? castData.cast.slice(0, 5) : [];
+
+  return (
+    <div className="min-h-screen bg-[#111] text-white font-sans">
+      
+      {/* --- HERO SECTION (Image de fond + Infos) --- */}
+      <div className="relative w-full h-[70vh] md:h-[80vh]">
+        
+        {/* Image de fond (Backdrop) */}
+        <div className="absolute inset-0">
+          <Image
+            src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
+            alt={movie.title}
+            fill
+            className="object-cover opacity-50"
+            priority 
+          />
+         
+          <div className="absolute inset-0 bg-gradient-to-t from-[#111] via-[#111]/50 to-transparent" />
+        </div>
+
+        {/* Contenu (Poster + Texte) */}
+        <div className="relative z-10 max-w-7xl mx-auto px-4 h-full flex flex-col md:flex-row items-end pb-12 gap-8">
+          
+          {/* Poster (caché sur mobile, visible sur desktop) */}
+          <div className="hidden md:block w-64 h-96 relative rounded-lg overflow-hidden shadow-2xl border-2 border-gray-700 flex-shrink-0">
+            <Image
+              src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+              alt={movie.title}
+              fill
+              className="object-cover"
+            />
+          </div>
+
+          {/* Textes */}
+          <div className="flex-1 space-y-4">
+            <h1 className="text-4xl md:text-6xl font-bold leading-tight">
+              {movie.title}
+            </h1>
+            
+            <div className="flex items-center gap-4 text-sm md:text-base text-gray-300">
+              {movie.vote_average ? (
+    <span className="bg-green-600 text-white px-2 py-1 rounded font-bold">
+      {movie.vote_average.toFixed(1)}
+    </span>
+  ) : null}
+              <span>
+    {movie.release_date ? movie.release_date.split('-')[0] : 'Date inconnue'}
+  </span>
+  <span>
+    {movie.runtime 
+      ? `${Math.floor(movie.runtime / 60)}h ${movie.runtime % 60}m` 
+      : 'Durée inconnue'}
+  </span>              <span>•</span>
+              {/* Liste des genres */}
+              <div className="flex gap-2">
+                {movie.genres?.map((g: any) => (
+      <span key={g.id} className="border border-gray-600 px-2 py-0.5 rounded-full text-xs">
+        {g.name}
+      </span>
+    ))}
+              </div>
+            </div>
+
+            <p className="text-gray-300 max-w-2xl text-lg leading-relaxed">
+              {movie.overview}
+            </p>
+
+            {/* Bouton Réserver */}
+            <div className="pt-4">
+              <button className="bg-yellow-500 text-black px-8 py-3 rounded-full font-bold text-lg hover:bg-yellow-400 transition-transform transform hover:scale-105 shadow-lg shadow-yellow-500/20">
+                🎟️ Réserver ma place
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* --- SECTION CASTING --- */}
+      <div className="max-w-7xl mx-auto px-4 py-12">
+        <h2 className="text-2xl font-bold mb-6 border-l-4 border-yellow-500 pl-3">Casting principal</h2>
+        <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-gray-700">
+          {mainCast.map((actor: any) => (
+            <div key={actor.id} className="min-w-[120px] text-center">
+              <div className="w-24 h-24 mx-auto rounded-full overflow-hidden mb-2 relative border border-gray-700">
+                {actor.profile_path ? (
+                  <Image
+                    src={`https://image.tmdb.org/t/p/w200${actor.profile_path}`}
+                    alt={actor.name}
+                    fill
+                    className="object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-full bg-gray-800 flex items-center justify-center text-xs">No Image</div>
+                )}
+              </div>
+              <p className="font-bold text-sm">{actor.name}</p>
+              <p className="text-xs text-gray-400">{actor.character}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+    </div>
+  );
+}

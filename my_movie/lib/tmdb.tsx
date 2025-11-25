@@ -47,7 +47,7 @@ export async function getUpcomingMovies() {
   
   return data.results;
 }
-//  Récupérer les films à venir 
+//  Récupérer les films les miex notés
 export async function getTopRatedMovies() {
 
   const reponse = await fetch((`${BASE_URL}/movie/top_rated?api_key=${API_KEY}&language=fr-FR`), {
@@ -56,4 +56,23 @@ export async function getTopRatedMovies() {
   const data = await reponse.json();
   
   return data.results;
+}
+
+//  Récupérer les détails d'un film précis (avec son ID)
+export async function getMovieById(id: string) {
+
+  const reponse = await fetch((`${BASE_URL}/movie/${id}?api_key=${API_KEY}&language=fr-FR`), {
+    next: { revalidate: 3600 }
+  });
+return reponse.json();
+}
+
+//  Récupérer les détails d'un film précis (avec son ID)
+export async function getMovieCast(id: string) {
+
+  const reponse = await fetch((`${BASE_URL}/movie/${id}/credits?api_key=${API_KEY}&language=fr-FR`), {
+    next: { revalidate: 3600 }
+  });
+    if (!reponse.ok) return { cast: [] }; 
+    return reponse.json();
 }

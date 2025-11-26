@@ -1,11 +1,9 @@
 import type { Metadata } from "next";
-// Importe ta police Google Font si tu en as une (Inter par défaut)
 import { Inter } from "next/font/google"; 
 import "./globals.css";
-
-// Importe tes nouveaux composants
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
+import Providers from "../../components/Providers";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,8 +20,7 @@ export default function RootLayout({
   return (
     <html lang="fr">
       <body className={`${inter.className} bg-[#111] text-white flex flex-col min-h-screen`}>
-        
-        {/* 1. La Navbar est ici, fixe pour tout le site */}
+        <Providers>
         <Navbar />
 
         
@@ -33,7 +30,7 @@ export default function RootLayout({
 
         
         <Footer />
-        
+        </Providers>
       </body>
     </html>
   );

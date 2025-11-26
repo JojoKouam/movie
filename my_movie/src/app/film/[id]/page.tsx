@@ -1,6 +1,7 @@
 import { getMovieById, getMovieCast } from "../../../../lib/tmdb";
 import Image from "next/image";
 import Link from "next/link";
+import { auth } from "@/auth";
 
 export default async function MoviePage({
   params,
@@ -9,6 +10,7 @@ export default async function MoviePage({
 }) {
   const resolvedParams = await params;
   const id = resolvedParams.id;
+  const session = await auth();
 
   // les infos du film et le casting
   const [movie, castData] = await Promise.all([
@@ -94,9 +96,26 @@ export default async function MoviePage({
 
             {/* Bouton Réserver */}
             <div className="pt-4">
-              <button className="bg-green-600 text-black px-8 py-3 rounded-full font-bold text-lg hover:bg-yellow-400 transition-transform transform hover:scale-105 shadow-lg shadow-yellow-500/20">
+              {/* <button className="bg-green-600 text-black px-8 py-3 rounded-full font-bold text-lg hover:bg-yellow-400 transition-transform transform hover:scale-105 shadow-lg shadow-yellow-500/20">
                 🎟️ Réserver ma place
-              </button>
+              </button> */}
+              {session ? (
+                // utilisateur connecté réserve
+                <Link
+                  href={`/film/${movie.id}/reservation`}
+                  className="inline-block bg-green-600 text-black px-8 py-3 rounded-full font-bold text-lg hover:bg-yellow-400 transition-transform transform hover:scale-105 shadow-lg shadow-yellow-500/20"
+                >
+                  🎟️ Réserver ma place
+                </Link>
+              ) : (
+                // utilisateur pas connecté pas de réservation
+                <Link
+                  href={`/login?callbackUrl=/film/${movie.id}`}
+                  className="inline-block bg-gray-700 text-white px-8 py-3 rounded-full font-bold text-lg hover:bg-gray-600 transition-transform transform hover:scale-105"
+                >
+                  🔒 Se connecter pour réserver
+                </Link>
+              )}
             </div>
           </div>
         </div>

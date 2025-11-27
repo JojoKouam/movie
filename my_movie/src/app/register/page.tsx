@@ -1,4 +1,4 @@
-"use client"; // Indispensable pour gérer le formulaire
+"use client";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -21,9 +21,9 @@ export default function RegisterPage() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // Fonction qui envoie les données à ton API (quand on clique sur S'inscrire)
+  // Fonction qui envoie les données
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault(); // Empêche la page de se recharger
+    e.preventDefault(); 
     setLoading(true);
     setError("");
 
@@ -35,13 +35,14 @@ export default function RegisterPage() {
       });
 
       if (res.ok) {
-        // Si c'est bon, on redirige vers la page de connexion
+  
         router.push("/login");
       } else {
-        // Sinon, on affiche l'erreur renvoyée par l'API (ex: "Email déjà pris")
+        
         const data = await res.json();
         setError(data.message || "Une erreur est survenue.");
       }
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (err) {
       setError("Erreur de connexion au serveur.");
     } finally {
@@ -59,7 +60,7 @@ export default function RegisterPage() {
           <p className="text-gray-400 text-sm">Rejoignez la communauté CinéMathé</p>
         </div>
 
-        {/* Message d'erreur rouge si besoin */}
+        {/* Message d'erreur*/}
         {error && (
           <div className="bg-red-500/10 border border-red-500 text-red-500 text-sm p-3 rounded-lg mb-6 text-center">
             {error}

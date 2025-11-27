@@ -3,7 +3,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { auth } from "@/auth";
 import TrailerModal from "components/TrailerModal";
-
+import { prisma } from "../../../../lib/prisma";
+import FavoriteButton from "components/FavoriteButton";
 export default async function MoviePage({
   params,
 }: {
@@ -12,6 +13,17 @@ export default async function MoviePage({
   const resolvedParams = await params;
   const id = resolvedParams.id;
   const session = await auth();
+
+  const favorite = session?.user?.id ? await prisma.favorite.findUnique({
+  where: {
+    userId_movieId: {
+      userId: session.user.id,
+      movieId: id
+    }
+  }
+}) : null;
+
+const isFavorite = !!favorite;
 
   // les infos du film et le casting
   const [movie, castData, videoData] = await Promise.all([
@@ -117,6 +129,7 @@ export default async function MoviePage({
                 </Link>
               )}
               <TrailerModal videoKey={videoData?.key} />
+              <FavoriteButton movieId={id} initialIsFavorite={isFavorite} />
             </div>
           </div>
         </div>

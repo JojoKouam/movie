@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Link from "next/link";
+// import Link from "next/link";
 
 // données
 const CINEMAS = [
@@ -55,7 +55,7 @@ export default function CinemasPage() {
                   className="object-cover group-hover:scale-105 transition-transform duration-500"
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#1c1c1c] to-transparent opacity-80"></div>
+                <div className="absolute inset-0 bg-linear-to-t from-[#1c1c1c] to-transparent opacity-80"></div>
                 <div className="absolute bottom-4 left-4">
                   <h2 className="text-xl font-bold text-white">
                     {cinema.name}

@@ -35,6 +35,7 @@ export default function LoginPage() {
         router.push("/");
         router.refresh(); 
       }
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       setError("Une erreur est survenue.");
       setLoading(false);

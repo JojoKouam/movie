@@ -21,7 +21,7 @@ export default function ReservationPage({ params }: { params: { id: string } }) 
   const router = useRouter();
   const { data: session, status } = useSession();
   
-  // État : Liste des sièges 
+  // Liste des sièges 
   const [selectedSeats, setSelectedSeats] = useState<string[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
 
@@ -38,13 +38,11 @@ export default function ReservationPage({ params }: { params: { id: string } }) 
     }
   };
 useEffect(() => {
-    // Si le chargement est fini
+   
     if (status === "unauthenticated") {
       router.push("/login"); 
     }
   }, [status, router]);
-
-  // Pendant que NextAuth vérifie si on est connecté, on affiche un petit chargement
   if (status === "loading") {
     return <div className="min-h-screen bg-[#111] flex items-center justify-center text-white">Chargement...</div>;
   }
@@ -68,8 +66,6 @@ useEffect(() => {
         color: '#fff',
       }
     });
-    
-    // Puis on redirige
     router.push("/mes-reservations");
   };
 

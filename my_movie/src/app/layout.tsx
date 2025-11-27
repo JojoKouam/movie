@@ -10,7 +10,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "CinéMathé - Réservation de cinéma",
-  description: "Clone de Pathé CI réalisé avec Next.js",
+  description: "Clone de site de cinéma réalisé avec Next.js",
 };
 
 export default function RootLayout({

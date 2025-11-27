@@ -4,14 +4,35 @@ generator client {
 
 datasource db {
   provider = "sqlite"
-  url      = env("DATABASE_URL")
+  url      = "file:./dev.db"
 }
 
+// Modèle Utilisateur
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  name      String?
-  password  String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id            String    @id @default(cuid())
+  email         String    @unique
+  name          String?
+  password      String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  
+  // 👇 AJOUTE CETTE LIGNE (Relation)
+  reservations  Reservation[]
+}
+
+// 👇 AJOUTE TOUT CE BLOC (Nouveau modèle)
+model Reservation {
+  id          String   @id @default(cuid())
+  
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  
+  movieId     String
+  movieTitle  String
+  cinema      String
+  showTime    String
+  seats       String
+  totalPrice  Int
+  
+  createdAt   DateTime @default(now())
 }

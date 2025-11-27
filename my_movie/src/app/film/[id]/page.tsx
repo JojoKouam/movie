@@ -41,13 +41,13 @@ export default async function MoviePage({
             priority
           />
 
-          <div className="absolute inset-0 bg-gradient-to-t from-[#111] via-[#111]/50 to-transparent" />
+          <div className="absolute inset-0 bg-linear-to-t from-[#111] via-[#111]/50 to-transparent" />
         </div>
 
         {/* Contenu */}
         <div className="relative z-10 w-full max-w-7xl mx-auto px-4 pt-32 pb-12 flex flex-col md:flex-row items-end gap-8">
           {/* Poster */}
-          <div className="hidden md:block w-64 h-96 relative rounded-lg overflow-hidden shadow-2xl border-2 border-gray-700 flex-shrink-0">
+          <div className="hidden md:block w-64 h-96 relative rounded-lg overflow-hidden shadow-2xl border-2 border-gray-700 shrink-0">
             <Image
               src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
               alt={movie.title}

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
     
 import { useSession } from "next-auth/react";
 import { useEffect } from "react"; 
@@ -17,8 +17,10 @@ const PRICE_PER_SEAT = 3500;
 const OCCUPIED_SEATS = ["A3", "A4", "C5", "C6", "E1", "E2"];
 
  
-export default function ReservationPage({ params }: { params: { id: string } }) {
+export default function ReservationPage({  }: { params: { id: string } }) {
   const router = useRouter();
+  const params = useParams();
+  const id = params.id as string;
   const { data: session, status } = useSession();
   
   // Liste des sièges 
@@ -61,10 +63,10 @@ useEffect(() => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          movieId: params.id,
-          movieTitle: "Film Réservé", // Idéalement, passe le titre en props à la page
-          cinema: "Pathé Cap Sud",    // Valeur par défaut pour l'instant
-          showTime: "20h00",          // Valeur par défaut
+          movieId: id,
+          movieTitle: "Film Réservé", 
+          cinema: "Pathé Cap Sud",    
+          showTime: "20h00",          
           seats: selectedSeats,
           totalPrice: selectedSeats.length * PRICE_PER_SEAT
         })

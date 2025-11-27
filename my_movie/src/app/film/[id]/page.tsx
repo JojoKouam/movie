@@ -5,6 +5,8 @@ import { auth } from "@/auth";
 import TrailerModal from "components/TrailerModal";
 import { prisma } from "../../../../lib/prisma";
 import FavoriteButton from "components/FavoriteButton";
+import StarRating from "components/StarRating";
+
 export default async function MoviePage({
   params,
 }: {
@@ -25,6 +27,15 @@ export default async function MoviePage({
 
 const isFavorite = !!favorite;
 
+const userRating = session?.user?.id ? await prisma.rating.findUnique({
+  where: {
+    userId_movieId: {
+      userId: session.user.id,
+      movieId: id
+    }
+  }
+}) : null;
+const initialScore = userRating?.score || 0;
   // les infos du film et le casting
   const [movie, castData, videoData] = await Promise.all([
     getMovieById(id),
@@ -103,6 +114,13 @@ const isFavorite = !!favorite;
                 ))}
               </div>
             </div>
+            <div className="py-4 border-t border-gray-800 my-4 flex items-center justify-between">
+  {/* Affichage des étoiles seulement si connecté */}
+  {session && (
+    <StarRating movieId={id} initialRating={initialScore} />
+  )}
+</div>
+
 
             <p className="text-gray-300 max-w-2xl text-lg leading-relaxed">
               {movie.overview}

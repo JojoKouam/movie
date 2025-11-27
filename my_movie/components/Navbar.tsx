@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
+import SearchBar from "./SearchBar";
 
 export default function Navbar() {
   const { data: session } = useSession();
@@ -28,7 +29,9 @@ export default function Navbar() {
               CinéMathé
             </h1>
           </Link>
-
+<div className="flex-1 mx-8 flex justify-center">
+   <SearchBar />
+</div>
           {/* MENU DESKTOP */}
           <nav className="hidden md:flex items-center gap-8 text-sm font-medium">
             <Link

@@ -15,12 +15,12 @@ model User {
   password      String?
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
-  
-  // 👇 AJOUTE CETTE LIGNE (Relation)
-  reservations  Reservation[]
-}
 
-// 👇 AJOUTE TOUT CE BLOC (Nouveau modèle)
+  reservations  Reservation[]
+  favorites   Favorite[]
+  ratings      Rating[]
+}
+// Modèle Reservation
 model Reservation {
   id          String   @id @default(cuid())
   
@@ -35,4 +35,24 @@ model Reservation {
   totalPrice  Int
   
   createdAt   DateTime @default(now())
+}
+
+// Modèle Favori
+model Favorite {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  movieId   String   
+  
+  @@unique([userId, movieId])
+}
+// Modèle notes
+model Rating {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  movieId   String
+  score     Int     
+  
+  @@unique([userId, movieId])
 }

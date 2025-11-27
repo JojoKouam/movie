@@ -16,7 +16,7 @@ const PRICE_PER_SEAT = 3500;
 //  une fausse liste de sièges 
 const OCCUPIED_SEATS = ["A3", "A4", "C5", "C6", "E1", "E2"];
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+ 
 export default function ReservationPage({ params }: { params: { id: string } }) {
   const router = useRouter();
   const { data: session, status } = useSession();
@@ -55,18 +55,33 @@ useEffect(() => {
     
     setIsProcessing(true);
     
-    // Simulation d'attente serveur
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    toast.success(`Paiement validé pour ${selectedSeats.join(", ")} !`, {
-      duration: 4000,
-      icon: '🎟️',
-      style: {
-        background: '#333',
-        color: '#fff',
+   try {
+      // 1. On enregistre en BDD
+      const res = await fetch("/api/reservation", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          movieId: params.id,
+          movieTitle: "Film Réservé", // Idéalement, passe le titre en props à la page
+          cinema: "Pathé Cap Sud",    // Valeur par défaut pour l'instant
+          showTime: "20h00",          // Valeur par défaut
+          seats: selectedSeats,
+          totalPrice: selectedSeats.length * PRICE_PER_SEAT
+        })
+      });
+
+      if (res.ok) {
+        toast.success("Réservation validée !");
+        router.push("/mes-reservations");
+      } else {
+        toast.error("Erreur lors de la réservation");
       }
-    });
-    router.push("/mes-reservations");
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (e) {
+      toast.error("Erreur système");
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   return (

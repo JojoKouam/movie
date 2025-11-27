@@ -4,8 +4,8 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
     
 import { useSession } from "next-auth/react";
-import { useEffect } from "react"; // On a besoin de useEffect pour rediriger
-
+import { useEffect } from "react"; 
+import toast from "react-hot-toast";
   
 
 // Configuration de la salle (6 rangées de 8 sièges)
@@ -38,9 +38,9 @@ export default function ReservationPage({ params }: { params: { id: string } }) 
     }
   };
 useEffect(() => {
-    // Si le chargement est fini (status != loading) et qu'il n'y a pas de session...
+    // Si le chargement est fini
     if (status === "unauthenticated") {
-      router.push("/login"); // ... Oust ! Dehors !
+      router.push("/login"); 
     }
   }, [status, router]);
 
@@ -57,11 +57,20 @@ useEffect(() => {
     
     setIsProcessing(true);
     
-    // Simulation d'attente serveur 
+    // Simulation d'attente serveur
     await new Promise(resolve => setTimeout(resolve, 2000));
     
-    alert(`Paiement validé pour ${selectedSeats.join(", ")} !`);
-    router.push("/"); 
+    toast.success(`Paiement validé pour ${selectedSeats.join(", ")} !`, {
+      duration: 4000,
+      icon: '🎟️',
+      style: {
+        background: '#333',
+        color: '#fff',
+      }
+    });
+    
+    // Puis on redirige
+    router.push("/mes-reservations");
   };
 
   return (

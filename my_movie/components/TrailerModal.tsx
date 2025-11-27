@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 
-export default function TrailerModal({ videoKey }: { videoKey: string }) {
+export default function TrailerModal({ videoKey }: { videoKey?: string }) {
   const [isOpen, setIsOpen] = useState(false);
 
   if (!videoKey) return null; // Pas de vidéo ? Pas de bouton.

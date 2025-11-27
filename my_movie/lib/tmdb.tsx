@@ -1,11 +1,38 @@
 const API_KEY = process.env.TMDB_API_KEY;
 const BASE_URL = 'https://api.themoviedb.org/3';
-interface TMDBVideo {
+export interface TMDBVideo {
   id: string;
   key: string; 
   site: string; 
   type: string;
   name: string;
+}
+
+// Définition d'un Genre
+export interface Genre {
+  id: number;
+  name: string;
+}
+
+// Définition d'un Acteur (Cast)
+export interface CastMember {
+  id: number;
+  name: string;
+  character: string;
+  profile_path: string | null;
+}
+
+// Définition d'un Film complet (Détails)
+export interface MovieDetails {
+  id: number;
+  title: string;
+  overview: string;
+  backdrop_path: string;
+  poster_path: string;
+  release_date: string;
+  vote_average: number;
+  runtime: number;
+  genres: Genre[];
 }
 
 //Récupérer les films du moment

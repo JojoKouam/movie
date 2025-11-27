@@ -1,4 +1,4 @@
-import { getMovieById, getMovieCast, getMovieVideos} from "../../../../lib/tmdb";
+import { getMovieById, getMovieCast, getMovieVideos, type MovieDetails, type CastMember, type TMDBVideo} from "../../../../lib/tmdb";
 import Image from "next/image";
 import Link from "next/link";
 import { auth } from "@/auth";
@@ -18,7 +18,7 @@ export default async function MoviePage({
     getMovieById(id),
     getMovieCast(id),
     getMovieVideos(id)
-  ]);
+  ]) as [MovieDetails, { cast: CastMember[] }, TMDBVideo | undefined]; 
 
   console.log("--- DEBUG FILM ---");
   console.log("ID demandé :", id);
@@ -81,7 +81,7 @@ export default async function MoviePage({
               <span>•</span>
               {/* Liste des genres */}
               <div className="flex gap-2">
-                {movie.genres?.map((g: any) => (
+                {movie.genres?.map((g) => (
                   <span
                     key={g.id}
                     className="border border-gray-600 px-2 py-0.5 rounded-full text-xs"
@@ -128,7 +128,7 @@ export default async function MoviePage({
           Casting principal
         </h2>
         <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-gray-700">
-          {mainCast.map((actor: any) => (
+          {mainCast.map((actor) => (
             <div key={actor.id} className="min-w-[120px] text-center">
               <div className="w-24 h-24 mx-auto rounded-full overflow-hidden mb-2 relative border border-gray-700">
                 {actor.profile_path ? (

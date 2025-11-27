@@ -2,46 +2,66 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+    
+import { useSession } from "next-auth/react";
+import { useEffect } from "react"; // On a besoin de useEffect pour rediriger
+
+  
 
 // Configuration de la salle (6 rangées de 8 sièges)
 const ROWS = 6;
 const SEATS_PER_ROW = 8;
-const PRICE_PER_SEAT = 3500; // Prix en FCFA
+const PRICE_PER_SEAT = 3500; 
 
-// On génère une fausse liste de sièges déjà occupés pour faire réaliste
+//  une fausse liste de sièges 
 const OCCUPIED_SEATS = ["A3", "A4", "C5", "C6", "E1", "E2"];
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default function ReservationPage({ params }: { params: { id: string } }) {
   const router = useRouter();
+  const { data: session, status } = useSession();
   
-  // État : Liste des sièges sélectionnés par l'utilisateur ["B1", "B2"]
+  // État : Liste des sièges 
   const [selectedSeats, setSelectedSeats] = useState<string[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
 
   // Fonction qui gère le clic sur un siège
   const toggleSeat = (seatId: string) => {
-    if (OCCUPIED_SEATS.includes(seatId)) return; // Si occupé, on ne fait rien
+    if (OCCUPIED_SEATS.includes(seatId)) return; 
 
     if (selectedSeats.includes(seatId)) {
-      // Si déjà sélectionné, on l'enlève
+      
       setSelectedSeats(selectedSeats.filter((s) => s !== seatId));
     } else {
-      // Sinon, on l'ajoute
+     
       setSelectedSeats([...selectedSeats, seatId]);
     }
   };
+useEffect(() => {
+    // Si le chargement est fini (status != loading) et qu'il n'y a pas de session...
+    if (status === "unauthenticated") {
+      router.push("/login"); // ... Oust ! Dehors !
+    }
+  }, [status, router]);
 
-  // Fonction pour payer (Simulation)
+  // Pendant que NextAuth vérifie si on est connecté, on affiche un petit chargement
+  if (status === "loading") {
+    return <div className="min-h-screen bg-[#111] flex items-center justify-center text-white">Chargement...</div>;
+  }
+  
+  // Si pas connecté, on retourne null pour ne rien afficher avant la redirection
+  if (!session) return null;
+  // Fonction pour payer 
   const handlePayment = async () => {
     if (selectedSeats.length === 0) return;
     
     setIsProcessing(true);
     
-    // Simulation d'attente serveur (2 secondes)
+    // Simulation d'attente serveur 
     await new Promise(resolve => setTimeout(resolve, 2000));
     
     alert(`Paiement validé pour ${selectedSeats.join(", ")} !`);
-    router.push("/"); // Retour accueil (plus tard on ira vers "Mes Billets")
+    router.push("/"); 
   };
 
   return (
@@ -51,13 +71,13 @@ export default function ReservationPage({ params }: { params: { id: string } }) 
         <h1 className="text-2xl font-bold mb-2 text-center">Choisissez vos places</h1>
         <p className="text-gray-400 text-center mb-8 text-sm">Écran face à vous</p>
 
-        {/* --- L'ÉCRAN (Décoratif) --- */}
-        <div className="w-full h-4 bg-gradient-to-b from-white/20 to-transparent rounded-t-full mb-12 mx-auto max-w-xl shadow-[0_10px_30px_rgba(255,255,255,0.1)]" />
+        {/*  L'ÉCRAN  */}
+        <div className="w-full h-4 bg-linear-to-b from-white/20 to-transparent rounded-t-full mb-12 mx-auto max-w-xl shadow-[0_10px_30px_rgba(255,255,255,0.1)]" />
 
-        {/* --- LA SALLE (Grille de sièges) --- */}
+        {/*  Grille de sièges */}
         <div className="flex flex-col gap-3 items-center mb-12">
           {Array.from({ length: ROWS }).map((_, rowIndex) => {
-            // Lettre de la rangée (A, B, C...)
+            // Lettre de la rangée
             const rowLabel = String.fromCharCode(65 + rowIndex);
             
             return (
@@ -93,7 +113,7 @@ export default function ReservationPage({ params }: { params: { id: string } }) 
           })}
         </div>
 
-        {/* --- LÉGENDE --- */}
+        {/*LÉGENDE*/}
         <div className="flex justify-center gap-6 mb-8 text-sm text-gray-400">
           <div className="flex items-center gap-2">
             <div className="w-4 h-4 bg-gray-800 rounded-sm"></div> Libre
@@ -106,7 +126,7 @@ export default function ReservationPage({ params }: { params: { id: string } }) 
           </div>
         </div>
 
-        {/* --- BARRE DE PAIEMENT --- */}
+        {/*BARRE DE PAIEMENT*/}
         <div className="bg-[#1c1c1c] p-6 rounded-2xl border border-gray-800 flex flex-col md:flex-row items-center justify-between gap-4 sticky bottom-4 shadow-2xl">
           <div>
             <p className="text-gray-400 text-sm">Total à payer</p>

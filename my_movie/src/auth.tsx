@@ -1,11 +1,10 @@
-// src/auth.ts
+
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
     
 import { prisma } from "../lib/prisma";
 
   import bcrypt from "bcryptjs";
-import { z } from "zod"; // Optionnel, mais NextAuth l'utilise souvent en interne
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -15,7 +14,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" },
       },
-      // C'est cette fonction qui se lance quand on clique sur "Se connecter"
+     
       authorize: async (credentials) => {
         if (!credentials?.email || !credentials?.password) {
           return null;
@@ -24,7 +23,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         const email = credentials.email as string;
         const password = credentials.password as string;
 
-        // 1. On cherche l'utilisateur dans la BDD
+        
         const user = await prisma.user.findUnique({
           where: { email },
         });
@@ -33,14 +32,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           throw new Error("Utilisateur introuvable");
         }
 
-        // 2. On vérifie si le mot de passe correspond au hash crypté
+        
         const isPasswordValid = await bcrypt.compare(password, user.password);
 
         if (!isPasswordValid) {
           throw new Error("Mot de passe incorrect");
         }
 
-        // 3. Si tout est bon, on retourne l'utilisateur
+       
         return {
           id: user.id,
           name: user.name,

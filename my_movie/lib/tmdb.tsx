@@ -1,38 +1,10 @@
-// const TMDB_API_KEY = process.env.TMDB_API_KEY;
-// const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
-
-
-// async function fetchTMDB(endpoint: string) {
-//   const url = `${TMDB_BASE_URL}${endpoint}?api_key=${TMDB_API_KEY}&language=fr-FR`;
-  
-//   const res = await fetch(url, {
-//     next: { revalidate: 3600 } 
-//   });
-
-//   if (!res.ok) {
-//     throw new Error(`Erreur TMDB: ${res.statusText}`);
-//   }
-
-//   return res.json();
-// }
-
-// // Nos fonctions prêtes à l'emploi
-// export async function getNowPlayingMovies() {
-//   return await fetchTMDB('/movie/now_playing');
-// }
-
-// export async function getUpcomingMovies() {
-//   return await fetchTMDB('/movie/upcoming');
-// }
-
-
 const API_KEY = process.env.TMDB_API_KEY;
 const BASE_URL = 'https://api.themoviedb.org/3';
 interface TMDBVideo {
   id: string;
-  key: string; // C'est l'ID YouTube
-  site: string; // ex: "YouTube"
-  type: string; // ex: "Trailer", "Teaser"
+  key: string; 
+  site: string; 
+  type: string;
   name: string;
 }
 
@@ -65,7 +37,7 @@ export async function getTopRatedMovies() {
   return data.results;
 }
 
-//  Récupérer les détails d'un film précis (avec son ID)
+//  Récupérer les détails d'un film précis 
 export async function getMovieById(id: string) {
 
   const reponse = await fetch((`${BASE_URL}/movie/${id}?api_key=${API_KEY}&language=fr-FR`), {
@@ -74,7 +46,7 @@ export async function getMovieById(id: string) {
 return reponse.json();
 }
 
-//  Récupérer les détails d'un film précis (avec son ID)
+//  Récupérer les cteur d'u film précis 
 export async function getMovieCast(id: string) {
 
   const reponse = await fetch((`${BASE_URL}/movie/${id}/credits?api_key=${API_KEY}&language=fr-FR`), {
@@ -85,25 +57,21 @@ export async function getMovieCast(id: string) {
 }
 
 export async function getMovieVideos(id: string) {
-  // 1. Essayer de récupérer les vidéos en Français
-  let url = `${BASE_URL}/movie/${id}/videos?api_key=${API_KEY}&language=fr-FR`;
-  let res = await fetch(url, { next: { revalidate: 3600 } });
+  // recup les vidéos en Français
+ 
+  let res = await fetch((`${BASE_URL}/movie/${id}/videos?api_key=${API_KEY}&language=fr-FR`), { next: { revalidate: 3600 } });
   let data = await res.json();
-
-  // On cherche un trailer YouTube
   let trailer = data.results.find((vid: TMDBVideo) => vid.type === "Trailer" && vid.site === "YouTube");
 
-  // 2. Si pas de trailer FR, on essaie en Anglais (US)
+  // dans le cas contraire en anglais
   if (!trailer) {
-    url = `${BASE_URL}/movie/${id}/videos?api_key=${API_KEY}&language=en-US`;
-    res = await fetch(url, { next: { revalidate: 3600 } });
-    data = await res.json();
     
-    // On cherche un trailer US
+    res = await fetch((`${BASE_URL}/movie/${id}/videos?api_key=${API_KEY}&language=en-US`), { next: { revalidate: 3600 } });
+    data = await res.json();
+  
     trailer = data.results.find((vid: TMDBVideo) => vid.type === "Trailer" && vid.site === "YouTube");
   }
 
-  // 3. Si toujours rien, on prend la première vidéo YouTube dispo (Teaser, Clip...)
   if (!trailer) {
     trailer = data.results.find((vid: TMDBVideo) => vid.site === "YouTube");
   }

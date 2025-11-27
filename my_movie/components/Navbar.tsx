@@ -24,7 +24,7 @@ export default function Navbar() {
             <span className="text-2xl group-hover:rotate-12 transition-transform">
               🍿
             </span>
-            <h1 className="text-xl font-bold bg-gradient-to-r from-green-400 to-green-600 bg-clip-text text-transparent">
+            <h1 className="text-xl font-bold bg-linear-to-r from-green-400 to-green-600 bg-clip-text text-transparent">
               CinéMathé
             </h1>
           </Link>

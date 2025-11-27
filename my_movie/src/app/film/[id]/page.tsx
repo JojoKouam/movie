@@ -1,7 +1,8 @@
-import { getMovieById, getMovieCast } from "../../../../lib/tmdb";
+import { getMovieById, getMovieCast, getMovieVideos} from "../../../../lib/tmdb";
 import Image from "next/image";
 import Link from "next/link";
 import { auth } from "@/auth";
+import TrailerModal from "components/TrailerModal";
 
 export default async function MoviePage({
   params,
@@ -13,9 +14,10 @@ export default async function MoviePage({
   const session = await auth();
 
   // les infos du film et le casting
-  const [movie, castData] = await Promise.all([
+  const [movie, castData, videoData] = await Promise.all([
     getMovieById(id),
     getMovieCast(id),
+    getMovieVideos(id)
   ]);
 
   console.log("--- DEBUG FILM ---");
@@ -95,10 +97,8 @@ export default async function MoviePage({
             </p>
 
             {/* Bouton Réserver */}
-            <div className="pt-4">
-              {/* <button className="bg-green-600 text-black px-8 py-3 rounded-full font-bold text-lg hover:bg-yellow-400 transition-transform transform hover:scale-105 shadow-lg shadow-yellow-500/20">
-                🎟️ Réserver ma place
-              </button> */}
+            <div className="lex flex items-center gap-4 pt-6">
+        
               {session ? (
                 // utilisateur connecté réserve
                 <Link
@@ -116,6 +116,7 @@ export default async function MoviePage({
                   🔒 Se connecter pour réserver
                 </Link>
               )}
+              <TrailerModal videoKey={videoData?.key} />
             </div>
           </div>
         </div>

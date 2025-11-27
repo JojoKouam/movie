@@ -18,9 +18,10 @@ async function searchMovies(query: string) {
 export default async function SearchPage({
   searchParams,
 }: {
-  searchParams: { q: string };
+  searchParams: Promise<{ q: string }>;
 }) {
-  const query = searchParams.q;
+  const resolvedSearchParams = await searchParams;
+  const query = resolvedSearchParams.q;
 
   // Si pas de recherche, on redirige vers l'accueil
   if (!query) redirect("/");

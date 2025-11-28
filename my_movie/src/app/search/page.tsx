@@ -34,7 +34,7 @@ export default async function SearchPage({
         
         {/* Titre avec le mot recherché */}
         <h1 className="text-3xl font-bold mb-8">
-          Résultats pour <span className="text-green-500">"{query}"</span>
+          Résultats pour <span className="text-green-500">&quot;{query}&quot;</span>
         </h1>
 
         {/* Affichage des résultats */}

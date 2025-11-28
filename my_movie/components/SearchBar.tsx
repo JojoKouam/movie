@@ -8,10 +8,10 @@ export default function SearchBar() {
   const router = useRouter();
 
   const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault(); // Empêche le rechargement
+    e.preventDefault();
     if (query.trim()) {
       router.push(`/search?q=${encodeURIComponent(query)}`);
-      setQuery(""); // Vide le champ après la recherche (optionnel)
+      setQuery("");
     }
   };
 

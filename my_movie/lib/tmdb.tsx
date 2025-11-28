@@ -84,22 +84,25 @@ export async function getMovieCast(id: string) {
 }
 
 export async function getMovieVideos(id: string) {
-  // recup les vidéos en Français
- 
-  let res = await fetch((`${BASE_URL}/movie/${id}/videos?api_key=${API_KEY}&language=fr-FR`), { next: { revalidate: 3600 } });
-  let data = await res.json();
-  let trailer = data.results.find((vid: TMDBVideo) => vid.type === "Trailer" && vid.site === "YouTube");
-
-  // dans le cas contraire en anglais
-  if (!trailer) {
-    
-    res = await fetch((`${BASE_URL}/movie/${id}/videos?api_key=${API_KEY}&language=en-US`), { next: { revalidate: 3600 } });
-    data = await res.json();
+  let url = `${BASE_URL}/movie/${id}/videos?api_key=${API_KEY}&language=fr-FR`;
+  let res = await fetch(url, { next: { revalidate: 3600 } });
   
-    trailer = data.results.find((vid: TMDBVideo) => vid.type === "Trailer" && vid.site === "YouTube");
+  if (!res.ok) return undefined;
+
+  let data = await res.json();
+  let trailer = data.results?.find((vid: TMDBVideo) => vid.type === "Trailer" && vid.site === "YouTube");
+
+  if (!trailer) {
+    url = `${BASE_URL}/movie/${id}/videos?api_key=${API_KEY}&language=en-US`;
+    res = await fetch(url, { next: { revalidate: 3600 } });
+    
+    if (!res.ok) return undefined;
+
+    data = await res.json();
+    trailer = data.results?.find((vid: TMDBVideo) => vid.type === "Trailer" && vid.site === "YouTube");
   }
 
-  if (!trailer) {
+  if (!trailer && data.results) {
     trailer = data.results.find((vid: TMDBVideo) => vid.site === "YouTube");
   }
 

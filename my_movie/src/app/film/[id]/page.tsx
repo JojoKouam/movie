@@ -1,4 +1,11 @@
-import { getMovieById, getMovieCast, getMovieVideos, type MovieDetails, type CastMember, type TMDBVideo} from "../../../../lib/tmdb";
+import {
+  getMovieById,
+  getMovieCast,
+  getMovieVideos,
+  type MovieDetails,
+  type CastMember,
+  type TMDBVideo,
+} from "../../../../lib/tmdb";
 import Image from "next/image";
 import Link from "next/link";
 import { auth } from "@/auth";
@@ -6,6 +13,7 @@ import TrailerModal from "components/TrailerModal";
 import { prisma } from "../../../../lib/prisma";
 import FavoriteButton from "components/FavoriteButton";
 import StarRating from "components/StarRating";
+import { notFound } from "next/navigation";
 
 export default async function MoviePage({
   params,
@@ -16,39 +24,42 @@ export default async function MoviePage({
   const id = resolvedParams.id;
   const session = await auth();
 
-  const favorite = session?.user?.id ? await prisma.favorite.findUnique({
-  where: {
-    userId_movieId: {
-      userId: session.user.id,
-      movieId: id
-    }
-  }
-}) : null;
+  const favorite = session?.user?.id
+    ? await prisma.favorite.findUnique({
+        where: {
+          userId_movieId: {
+            userId: session.user.id,
+            movieId: id,
+          },
+        },
+      })
+    : null;
 
-const isFavorite = !!favorite;
+  const isFavorite = !!favorite;
 
-const userRating = session?.user?.id ? await prisma.rating.findUnique({
-  where: {
-    userId_movieId: {
-      userId: session.user.id,
-      movieId: id
-    }
-  }
-}) : null;
-const initialScore = userRating?.score || 0;
+  const userRating = session?.user?.id
+    ? await prisma.rating.findUnique({
+        where: {
+          userId_movieId: {
+            userId: session.user.id,
+            movieId: id,
+          },
+        },
+      })
+    : null;
+  const initialScore = userRating?.score || 0;
   // les infos du film et le casting
-  const [movie, castData, videoData] = await Promise.all([
+  const [movie, castData, videoData] = (await Promise.all([
     getMovieById(id),
     getMovieCast(id),
-    getMovieVideos(id)
-  ]) as [MovieDetails, { cast: CastMember[] }, TMDBVideo | undefined]; 
+    getMovieVideos(id),
+  ])) as [MovieDetails, { cast: CastMember[] }, TMDBVideo | undefined];
 
-  console.log("--- DEBUG FILM ---");
-  console.log("ID demandé :", id);
-  console.log("Données reçues :", movie);
-  console.log("------------------");
   // les 5 premiers acteurs
   const mainCast = castData?.cast ? castData.cast.slice(0, 5) : [];
+  if (!movie || !movie.title) {
+    notFound();
+  }
 
   return (
     <div className="min-h-screen bg-[#111] text-white font-sans">
@@ -115,12 +126,11 @@ const initialScore = userRating?.score || 0;
               </div>
             </div>
             <div className="py-4 border-t border-gray-800 my-4 flex items-center justify-between">
-  {/* Affichage des étoiles seulement si connecté */}
-  {session && (
-    <StarRating movieId={id} initialRating={initialScore} />
-  )}
-</div>
-
+              {/* Affichage des étoiles seulement si connecté */}
+              {session && (
+                <StarRating movieId={id} initialRating={initialScore} />
+              )}
+            </div>
 
             <p className="text-gray-300 max-w-2xl text-lg leading-relaxed">
               {movie.overview}
@@ -128,13 +138,12 @@ const initialScore = userRating?.score || 0;
 
             {/* Bouton Réserver */}
             <div className="flex flex-col md:flex-row gap-4 pt-6 w-full md:w-auto">
-        
               {session ? (
                 // utilisateur connecté réserve
-                <Link 
-      href={`/film/${movie.id}/reservation`} 
-      className="bg-green-600 text-black px-8 py-3 rounded-full font-bold text-lg hover:bg-yellow-400 transition-transform transform hover:scale-105 shadow-lg shadow-yellow-500/20 w-full md:w-auto text-center"
-    >
+                <Link
+                  href={`/film/${movie.id}/reservation`}
+                  className="bg-green-600 text-black px-8 py-3 rounded-full font-bold text-lg hover:bg-yellow-400 transition-transform transform hover:scale-105 shadow-lg shadow-yellow-500/20 w-full md:w-auto text-center"
+                >
                   🎟️ Réserver ma place
                 </Link>
               ) : (
@@ -148,8 +157,8 @@ const initialScore = userRating?.score || 0;
               )}
               <TrailerModal videoKey={videoData?.key} />
               <div className="flex justify-center md:justify-start">
-    <FavoriteButton movieId={id} initialIsFavorite={isFavorite} />
-  </div>
+                <FavoriteButton movieId={id} initialIsFavorite={isFavorite} />
+              </div>
             </div>
           </div>
         </div>

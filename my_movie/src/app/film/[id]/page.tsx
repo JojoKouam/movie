@@ -127,14 +127,14 @@ const initialScore = userRating?.score || 0;
             </p>
 
             {/* Bouton Réserver */}
-            <div className="lex flex items-center gap-4 pt-6">
+            <div className="flex flex-col md:flex-row gap-4 pt-6 w-full md:w-auto">
         
               {session ? (
                 // utilisateur connecté réserve
-                <Link
-                  href={`/film/${movie.id}/reservation`}
-                  className="inline-block bg-green-600 text-black px-8 py-3 rounded-full font-bold text-lg hover:bg-yellow-400 transition-transform transform hover:scale-105 shadow-lg shadow-yellow-500/20"
-                >
+                <Link 
+      href={`/film/${movie.id}/reservation`} 
+      className="bg-green-600 text-black px-8 py-3 rounded-full font-bold text-lg hover:bg-yellow-400 transition-transform transform hover:scale-105 shadow-lg shadow-yellow-500/20 w-full md:w-auto text-center"
+    >
                   🎟️ Réserver ma place
                 </Link>
               ) : (
@@ -147,7 +147,9 @@ const initialScore = userRating?.score || 0;
                 </Link>
               )}
               <TrailerModal videoKey={videoData?.key} />
-              <FavoriteButton movieId={id} initialIsFavorite={isFavorite} />
+              <div className="flex justify-center md:justify-start">
+    <FavoriteButton movieId={id} initialIsFavorite={isFavorite} />
+  </div>
             </div>
           </div>
         </div>

@@ -9,9 +9,10 @@ export default function TrailerModal({ videoKey }: { videoKey?: string }) {
   return (
     <>
       <button 
-        onClick={() => setIsOpen(true)}
-        className="bg-gray-800 text-white px-6 py-3 rounded-full font-bold hover:bg-gray-700 transition flex items-center gap-2"
-      >
+  onClick={() => setIsOpen(true)}
+  // 👇 J'ai ajouté : w-full md:w-auto justify-center
+  className="bg-gray-800 text-white px-6 py-3 rounded-full font-bold hover:bg-gray-700 transition flex items-center justify-center gap-2 w-full md:w-auto"
+>
         📺 Voir la bande-annonce
       </button>
 

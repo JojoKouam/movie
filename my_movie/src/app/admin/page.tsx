@@ -8,7 +8,9 @@ export default async function AdminDashboard() {
   if (!session?.user?.id) {
     return (
       <div className="min-h-screen bg-[#111] flex items-center justify-center text-white">
-        <h1 className="text-2xl font-bold text-red-500">🔒 Connectez-vous d&apos;abord</h1>
+        <h1 className="text-2xl font-bold text-red-500">
+          🔒 Connectez-vous d&apos;abord
+        </h1>
       </div>
     );
   }
@@ -16,7 +18,6 @@ export default async function AdminDashboard() {
   const user = await prisma.user.findUnique({
     where: { id: session?.user?.id },
   });
-
 
   if (!user || user.role !== "ADMIN") {
     return (
@@ -29,13 +30,13 @@ export default async function AdminDashboard() {
   // RÉCUPÉRER LES STATS
   const [usersCount, reservations, totalRevenue] = await Promise.all([
     prisma.user.count(),
-    prisma.reservation.findMany({ 
-      include: { user: true }, 
-      orderBy: { createdAt: 'desc' } 
+    prisma.reservation.findMany({
+      include: { user: true },
+      orderBy: { createdAt: "desc" },
     }),
     prisma.reservation.aggregate({
-      _sum: { totalPrice: true }
-    })
+      _sum: { totalPrice: true },
+    }),
   ]);
 
   return (
@@ -51,10 +52,14 @@ export default async function AdminDashboard() {
           </div>
           <div className="bg-[#1c1c1c] p-6 rounded-xl border border-gray-800">
             <h3 className="text-gray-400 text-sm uppercase">Réservations</h3>
-            <p className="text-4xl font-bold text-green-500">{reservations.length}</p>
+            <p className="text-4xl font-bold text-green-500">
+              {reservations.length}
+            </p>
           </div>
           <div className="bg-[#1c1c1c] p-6 rounded-xl border border-gray-800">
-            <h3 className="text-gray-400 text-sm uppercase">Chiffre d&apos;affaires</h3>
+            <h3 className="text-gray-400 text-sm uppercase">
+              Chiffre d&apos;affaires
+            </h3>
             <p className="text-4xl font-bold text-yellow-500">
               {(totalRevenue._sum.totalPrice || 0).toLocaleString()} FCFA
             </p>
@@ -64,28 +69,38 @@ export default async function AdminDashboard() {
         {/*  TABLEAU DES VENTES  */}
         <h2 className="text-xl font-bold mb-4">Dernières ventes</h2>
         <div className="bg-[#1c1c1c] rounded-xl overflow-hidden border border-gray-800">
-          <table className="w-full text-left text-sm text-gray-400">
-            <thead className="bg-[#252525] text-white uppercase font-bold">
-              <tr>
-                <th className="p-4">Date</th>
-                <th className="p-4">Client</th>
-                <th className="p-4">Film</th>
-                <th className="p-4">Montant</th>
-              </tr>
-            </thead>
-            <tbody>
-              {reservations.map((res) => (
-                <tr key={res.id} className="border-t border-gray-800 hover:bg-white/5 transition">
-                  <td className="p-4">{new Date(res.createdAt).toLocaleDateString()}</td>
-                  <td className="p-4 font-bold text-white">{res.user.name}</td>
-                  <td className="p-4">{res.movieTitle}</td>
-                  <td className="p-4 text-green-400 font-mono">{res.totalPrice.toLocaleString()} F</td>
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-sm text-gray-400">
+              <thead className="bg-[#252525] text-white uppercase font-bold">
+                <tr>
+                  <th className="p-4">Date</th>
+                  <th className="p-4">Client</th>
+                  <th className="p-4">Film</th>
+                  <th className="p-4">Montant</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {reservations.map((res) => (
+                  <tr
+                    key={res.id}
+                    className="border-t border-gray-800 hover:bg-white/5 transition"
+                  >
+                    <td className="p-4">
+                      {new Date(res.createdAt).toLocaleDateString()}
+                    </td>
+                    <td className="p-4 font-bold text-white">
+                      {res.user.name}
+                    </td>
+                    <td className="p-4">{res.movieTitle}</td>
+                    <td className="p-4 text-green-400 font-mono">
+                      {res.totalPrice.toLocaleString()} F
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
-
       </div>
     </div>
   );

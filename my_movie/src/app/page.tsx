@@ -1,6 +1,5 @@
-import { getNowPlayingMovies, getUpcomingMovies, getTopRatedMovies } from '../../lib/tmdb';
+import { getNowPlayingMovies, getUpcomingMovies, getTopRatedMovies, type MovieDetails } from '../../lib/tmdb';
 import MovieCard from '../../components/MovieCard';
-import Image from 'next/image';
 
 export default async function Home() {
   //récupèrer les listes 
@@ -28,8 +27,8 @@ export default async function Home() {
         </div>
 
         <div className="flex overflow-x-auto gap-4 px-4 pb-4 snap-x scrollbar-thin scrollbar-thumb-green-600 scrollbar-track-gray-800">
-          {nowPlaying.map((movie: any) => (
-            <div key={movie.id} className="min-w-[160px] md:min-w-[200px] snap-start"><MovieCard movie={movie} /></div>
+          {nowPlaying.map((movie: MovieDetails) => (
+            <div key={movie.id} className="min-w-40 md:min-w-[200px] snap-start"><MovieCard movie={movie} /></div>
             
           ))}
         </div>
@@ -47,8 +46,8 @@ export default async function Home() {
 
         {/* Conteneur avec défilement horizontal */}
         <div className="flex overflow-x-auto gap-4 px-4 pb-4 snap-x scrollbar-thin scrollbar-thumb-green-600 scrollbar-track-gray-800">
-          {upcoming.map((movie: any) => (
-            <div key={movie.id} className="min-w-[160px] md:min-w-[200px] snap-start">
+          {upcoming.map((movie: MovieDetails) => (
+            <div key={movie.id} className="min-w-40 md:min-w-[200px] snap-start">
               <MovieCard movie={movie} />
             </div>
           ))}
@@ -64,8 +63,8 @@ export default async function Home() {
           </h2>
         </div>
         <div className="flex overflow-x-auto gap-4 px-4 pb-4 snap-x scrollbar-thin scrollbar-thumb-red-600 scrollbar-track-gray-800">
-          {topRated.map((movie: any) => (
-            <div key={movie.id} className="min-w-[160px] md:min-w-[200px] snap-start">
+          {topRated.map((movie: MovieDetails) => (
+            <div key={movie.id} className="min-w-40 md:min-w-[200px] snap-start">
               <MovieCard movie={movie} />
             </div>
           ))}

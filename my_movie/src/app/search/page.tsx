@@ -1,4 +1,6 @@
 import { redirect } from "next/navigation";
+import {  type MovieDetails } from 'lib/tmdb';
+
 import MovieCard from "components/MovieCard";
 import Link from "next/link";
 
@@ -40,8 +42,7 @@ export default async function SearchPage({
         {/* Affichage des résultats */}
         {movies.length > 0 ? (
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
-            {movies.map((movie: any) => (
-              // On filtre ceux qui n'ont pas d'image pour faire propre
+            {movies.map((movie: MovieDetails) => (
               movie.poster_path && <MovieCard key={movie.id} movie={movie} />
             ))}
           </div>

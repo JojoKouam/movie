@@ -90,6 +90,14 @@ export default function Navbar() {
                     >
                       🎟️ Mes billets
                     </Link>
+                    {session.user?.role === "ADMIN" && (
+                      <Link 
+                        href="/admin" 
+                        className="block px-4 py-2 text-sm text-yellow-500 hover:bg-gray-700 hover:text-yellow-400 transition border-t border-gray-700 mt-1"
+                      >
+                        ⚙️ Dashboard Admin
+                      </Link>
+                    )}
 
                     <div className="border-t border-gray-700 mt-1 pt-1">
                       <button

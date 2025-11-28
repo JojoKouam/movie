@@ -40,10 +40,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         }
 
        
-        return {
+         return {
           id: user.id,
           name: user.name,
           email: user.email,
+          role: user.role, // 👈 AJOUTE ÇA
         };
       },
     }),
@@ -52,17 +53,19 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     signIn: "/login", // On dit à NextAuth que notre page de login est ici
   },
   callbacks: {
-    async session({ session, token }) {
-      if (session?.user && token.sub) {
-        session.user.id = token.sub; // On ajoute l'ID à la session
-      }
-      return session;
-    },
     async jwt({ token, user }) {
       if (user) {
         token.sub = user.id;
+        token.role = user.role; // 1. On stocke le rôle dans le token
       }
       return token;
+    },
+    async session({ session, token }) {
+      if (session?.user && token.sub) {
+        session.user.id = token.sub;
+        session.user.role = token.role as string; // 2. On le passe à la session visible par le front
+      }
+      return session;
     },
   },
 });

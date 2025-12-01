@@ -79,7 +79,7 @@ export default async function MoviePage({
         </div>
 
         {/* Contenu */}
-        <div className="relative z-10 w-full max-w-7xl mx-auto px-4 pt-32 pb-12 flex flex-col md:flex-row items-end gap-8">
+        <div className="relative z-10 w-full max-w-7xl mx-auto px-4 pt-24 pb-8 md:pt-32 md:pb-12 flex flex-col md:flex-row items-start md:items-end gap-6 md:gap-8">
           {/* Poster */}
           <div className="hidden md:block w-64 h-96 relative rounded-lg overflow-hidden shadow-2xl border-2 border-gray-700 shrink-0">
             <Image
@@ -91,8 +91,8 @@ export default async function MoviePage({
           </div>
 
           {/* Textes */}
-          <div className="flex-1 space-y-4">
-            <h1 className="text-4xl md:text-6xl font-bold leading-tight">
+          <div className="flex-1 space-y-4 w-full">
+            <h1 className="text-3xl md:text-5xl font-bold leading-tight">
               {movie.title}
             </h1>
 

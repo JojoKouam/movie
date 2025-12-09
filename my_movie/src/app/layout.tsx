@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     template: "%s | Projet Éducatif Next.js", // Ex: "Titanic | Projet Éducatif Next.js"
   },
   description: "Projet de démonstration technique réalisé par Josée Kouamé. Application Fullstack (Next.js 15, Prisma, Postgres) simulant une plateforme de réservation.",
-  keywords: ["Portfolio Anabelle Josée Kouamé", "Développeur Fullstack", "Next.js 15", "Next.js", "React", "TypeScript", "Prisma", "Clone", "Projet Étudiant","Clone Movie", "Streaming", "Site movie en Nextjs", "Site Movie Nextjs"],
+  keywords: ["Portfolio Anabelle Josée Kouamé", "Développeur Fullstack", "Next.js 15", "Next.js", "React", "TypeScript", "Prisma", "Clone nextjs", "Projet Étudiant","Clone Movie", "Streaming", "Site movie en Nextjs", "Site Movie Nextjs",  "clone nextjs",  "Clone nextjs app"],
   openGraph: {
     title: "Démonstration technique - CinéMathé",
     description: "Découvrez cette application codée avec Next.js 15 et Tailwind CSS. Authentification, Base de données et API TMDB.",

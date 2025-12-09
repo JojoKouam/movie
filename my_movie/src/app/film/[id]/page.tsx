@@ -14,10 +14,24 @@ import { prisma } from "../../../../lib/prisma";
 import FavoriteButton from "components/FavoriteButton";
 import StarRating from "components/StarRating";
 import { notFound } from "next/navigation";
+import { Metadata } from "next";
 
-export default async function MoviePage({
-  params,
-}: {
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  const { id } = await params;
+  const movie = await getMovieById(id);
+
+  if (!movie) return { title: "Film introuvable" };
+
+  return {
+    title: `${movie.title} (Projet Démo)`,
+    description: `Détails techniques et API pour ${movie.title}.`,
+    openGraph: {
+      images: [`https://image.tmdb.org/t/p/w780${movie.backdrop_path}`],
+    },
+  };
+}
+
+export default async function MoviePage({ params,}: {
   params: Promise<{ id: string }>;
 }) {
   const resolvedParams = await params;
